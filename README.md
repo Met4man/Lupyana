@@ -251,6 +251,9 @@ published site.
 
 - Point the domain at the host and keep `https://lupyanapolyclinic.co.tz` as the
   only canonical origin. Do not add `www` unless you also redirect it.
+- The site sits at the repository root, so Vercel (and Netlify) need no Root
+  Directory or build settings: framework preset **Other**, no build command,
+  output directory left empty.
 - Configure the host to serve `404.html` for unknown paths.
 - `site.baseUrl` in `content.json` is already the live origin; canonical and
   `og:url` tags are absolute in every page.
