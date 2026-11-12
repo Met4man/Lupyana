@@ -1,0 +1,12 @@
+# OS and editor clutter
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+
+# Local tooling
+node_modules/
+npm-debug.log*
+
+# Failed-clone leftovers
+lupyana-polyclinic/lupyana 2/
