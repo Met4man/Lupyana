@@ -1,0 +1,11 @@
+# Development material and unpublished pages — keep these out of the public
+# deployment. The published site is only the HTML pages, assets/ and the root
+# files (robots.txt, sitemap.xml, 404.html).
+
+tools/
+_paused/
+README.md
+CREDITS.md
+package.json
+.gitignore
+.gitattributes
