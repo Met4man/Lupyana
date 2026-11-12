@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Cookie consent banner
+
+   The panel uses the same single teal palette as the emergency banner
+   (`--banner-*` tokens in banners.css): pale-teal panel, teal rim, one teal
+   leading edge and dark-teal copy. Nothing grey sits next to the stripe, so
+   the left edge reads as one colour in both themes. The buttons are the
+   shared `.btn` controls, so they inherit the site's normal button shape.
+   ========================================================================== */
+
+.cookie {
+  position: fixed;
+  right: var(--gutter);
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  left: var(--gutter);
+  z-index: 140;
+  max-width: 620px;
+  margin-inline: auto;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--banner-border, var(--c-border));
+  border-left: 4px solid var(--banner-edge, var(--c-primary));
+  border-radius: var(--radius-md);
+  background: var(--banner-bg, var(--c-surface));
+  color: var(--banner-body, var(--c-text));
+  box-shadow: var(--shadow-lg);
+  animation: cookie-in 260ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.cookie.is-leaving {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+@keyframes cookie-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.cookie__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1rem;
+}
+
+.cookie__text {
+  flex: 1 1 20rem;
+  margin: 0;
+  color: var(--banner-body, var(--c-muted));
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.cookie__text strong {
+  color: var(--banner-ink, var(--c-text));
+  font-weight: 600;
+}
+
+.cookie__link {
+  color: var(--banner-ink, var(--c-primary));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cookie__link:hover {
+  color: var(--banner-edge, var(--c-primary-700));
+}
+
+.cookie__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.cookie__actions .btn {
+  white-space: nowrap;
+}
+
+/* Footer "Cookie settings" control, styled to match the legal links. */
+.footer__cookie {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #cfe3df;
+  font: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.footer__cookie:hover {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer__cookie:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .cookie {
+    bottom: calc(var(--bottom-bar-height) + 0.85rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 560px) {
+  .cookie__actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .cookie__actions .btn {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie,
+  .cookie.is-leaving {
+    animation: none;
+    transition: none;
+  }
+}

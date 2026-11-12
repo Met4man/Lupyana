@@ -1,0 +1,155 @@
+/*
+  Services Marquee — CSS
+  An infinite, right-to-left scrolling row of "pill" chips with soft edge fades,
+  a small centred title and a faint gradient rule on top.
+
+  Everything is sized in `em`, so change --mq-size (or font-size on .mq) to scale the whole thing.
+  Tune the look with the custom properties below; no other CSS needs editing.
+*/
+.mq {
+  /* ---- tweak these ---- */
+  --mq-size: 16px;            /* master scale: pill height, padding, gaps, icons all follow */
+  --mq-speed: 45;             /* pixels per second (JS turns this into a duration). Override per marquee with data-speed="60" */
+  --mq-gap: .9em;             /* space between pills */
+  --mq-fade: 12%;             /* width of the left/right fade-out */
+  --mq-bg: #fff;              /* page/section background the fades blend into (mask is transparent, so this is only the section bg) */
+  --mq-pill-bg: #fff;
+  --mq-pill-border: #ececf8;
+  --mq-pill-text: #1b1b2f;
+  --mq-icon: #4f5bd5;         /* indigo icon colour */
+  --mq-title: #6b7280;
+  --mq-rule: #dfe1ff;         /* the faint lavender line along the top */
+  --mq-radius: 1em;
+
+  position: relative;
+  box-sizing: border-box;
+  padding: 1.2em 0 2.2em;
+  font-size: var(--mq-size);
+  background: var(--mq-bg);
+  color: var(--mq-pill-text);
+}
+.mq *, .mq *::before, .mq *::after { box-sizing: border-box; }
+
+/* top gradient rule */
+.mq::before {
+  content: "";
+  position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mq-rule) 18%, var(--mq-rule) 82%, transparent);
+}
+
+.mq__title {
+  margin: 0 0 1.6em;
+  text-align: center;
+  font-size: .9em;
+  font-weight: 400;
+  letter-spacing: .01em;
+  color: var(--mq-title);
+}
+
+/* the window; the mask fades pills in/out at both edges */
+.mq__viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--mq-fade), #000 calc(100% - var(--mq-fade)), transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 var(--mq-fade), #000 calc(100% - var(--mq-fade)), transparent);
+  padding-block: .6em;            /* room for pill shadows so they aren't clipped */
+}
+
+.mq__track {
+  display: flex;
+  width: max-content;
+  animation: mq-scroll var(--mq-duration, 40s) linear infinite;
+  will-change: transform;
+}
+.mq[data-direction="right"] .mq__track { animation-direction: reverse; }
+
+/* two identical groups sit side by side; moving the track by -50% lands exactly on the second copy = seamless loop */
+.mq__group {
+  display: flex;
+  flex: none;
+  gap: var(--mq-gap);
+  padding-right: var(--mq-gap);   /* keeps the gap between the last pill of group 1 and first of group 2 */
+  margin: 0;
+  list-style: none;
+}
+
+@keyframes mq-scroll { to { transform: translate3d(-50%, 0, 0); } }
+
+/* ---- pill ---- */
+.mq__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  flex: none;
+  padding: .95em 1.4em;
+  background: var(--mq-pill-bg);
+  border: 1px solid var(--mq-pill-border);
+  border-radius: var(--mq-radius);
+  box-shadow: 0 1px 2px rgba(60, 60, 120, .05), 0 8px 20px rgba(80, 90, 210, .05);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--mq-pill-text);
+  user-select: none;
+}
+.mq__icon {
+  width: 1.15em; height: 1.15em; flex: none;
+  fill: none; stroke: var(--mq-icon); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ---- behaviours ---- */
+.mq[data-pause-on-hover]:hover .mq__track,
+.mq[data-pause-on-hover]:focus-within .mq__track { animation-play-state: paused; }
+.mq[data-mq-off] .mq__track { animation-play-state: paused; }   /* set by JS when off-screen */
+
+/* ---- no JS / reduced motion: no animation, row becomes a swipeable strip ---- */
+.mq:not([data-mq-ready]) .mq__track { animation: none; }
+.mq:not([data-mq-ready]) .mq__viewport { overflow-x: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .mq__track { animation: none !important; }
+  .mq__viewport { overflow-x: auto; }
+}
+
+/* ==========================================================================
+   Lupyana Polyclinic — theme-aware mapping (additive, scoped to .mq)
+   Maps the component's own custom properties onto the site tokens so the
+   marquee matches the page in both light and dark mode. No site rule is
+   modified and no content is invented; every rule below lives inside `.mq`.
+   ========================================================================== */
+.mq {
+  --mq-size: 16px;
+  --mq-speed: 50;
+  --mq-gap: 0.75em;
+  --mq-fade: 10%;
+  --mq-bg: var(--c-bg);
+  --mq-pill-bg: var(--c-surface);
+  --mq-pill-border: var(--c-border);
+  --mq-pill-text: var(--c-text);
+  --mq-icon: var(--c-accent-strong);
+  --mq-title: var(--c-muted);
+  --mq-rule: var(--c-border);
+  --mq-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+}
+
+/* The site's global h2 typography would restyle the small centred title, so
+   keep the component's own look here. */
+.mq .mq__title {
+  font-family: var(--font-sans);
+  font-size: 0.9em;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.4;
+  color: var(--mq-title);
+}
+
+/* Depth follows the site's elevation token. */
+.mq .mq__pill {
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 480px) {
+  .mq {
+    --mq-size: 14px;
+    --mq-fade: 8%;
+  }
+}

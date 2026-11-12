@@ -1,0 +1,27 @@
+/* ==========================================================================
+   Primary buttons on dark bands
+
+   The CTA bands at the foot of every page are a dark teal gradient
+   (#074643 -> #0b5d5a). A solid brand-green button almost disappears
+   against that surface, so primary buttons inside a band use the pale
+   tint of the same green instead: it stays in the palette, reads clearly
+   as a green button and keeps the white copy of the band around it.
+
+   Everywhere else `.btn--primary` keeps the normal solid green surface.
+   ========================================================================== */
+
+.cta-band .btn.btn--primary:not(.btn--link) {
+  border-color: #dcefec;
+  background-color: #dcefec;
+  background-image: none;
+  color: #074643;
+  text-shadow: none;
+  box-shadow: 0 12px 28px -20px rgba(2, 30, 29, 0.7);
+}
+
+.cta-band .btn.btn--primary:not(.btn--link):hover {
+  border-color: #c7e4df;
+  background-color: #c7e4df;
+  color: #074643;
+  box-shadow: 0 12px 28px -18px rgba(2, 30, 29, 0.7);
+}

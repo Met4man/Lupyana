@@ -1,0 +1,459 @@
+/* ==========================================================================
+   Lupyana Polyclinic — opening ident
+
+   Matched to the clinic's motion sample (Lupyana.mp4, 500 × 500, 5 s):
+
+     background   flat #141b30 navy, with a teal bloom in the bottom-right
+                  corner (#267d9a at the corner, gone by 37% of the short side)
+                  and a quieter blue bloom in the top-left (#122a54)
+     logo         the clinic's real artwork, rendered white
+     sequence     a white loader sweeps a full turn and collapses into the
+                  heart; the ink heart forms, the colour figures rise into it,
+                  the wordmark locks in, then the emblem beats twice
+     hold         the finished lockup, completely still
+     exit         fade while drifting up slightly
+
+   The artwork itself is the clinic's own logo, split into six transparent PNG
+   layers (assets/img/intro/, cut by tools/extract-intro-layers.mjs). Nothing
+   here redraws the mark; the white treatment is a CSS filter on those layers.
+
+   The layers are plain <img> elements positioned as percentages of a 380 × 409
+   box, so the lockup and its motion are identical at every screen size. The
+   loop is centred on the heart with an absolutely positioned square, and all
+   rotating/scaling happens on HTML boxes rather than SVG children — the one
+   cross-browser-safe way to keep the loader centred on phones.
+
+   Every animation is gated on .is-ready, which the script adds once the layer
+   images have decoded (250 ms cap). Under prefers-reduced-motion the finished
+   lockup is shown still for a shorter beat.
+   ========================================================================== */
+
+html.intro-pending {
+  overflow: hidden;
+}
+
+html.intro-pending main,
+html.intro-pending #siteHeader,
+html.intro-pending #siteFooter,
+html.intro-pending .mobile-bar,
+html.intro-pending .cookie {
+  visibility: hidden;
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle 37vmin at 100% 100%,
+      rgba(38, 125, 154, 1) 0%,
+      rgba(38, 125, 154, 0.78) 20%,
+      rgba(38, 125, 154, 0.52) 40%,
+      rgba(38, 125, 154, 0.27) 60%,
+      rgba(38, 125, 154, 0.13) 80%,
+      rgba(38, 125, 154, 0) 100%
+    ),
+    radial-gradient(
+      circle 37vmin at 0% 0%,
+      rgba(18, 42, 84, 1) 0%,
+      rgba(18, 42, 84, 0.83) 20%,
+      rgba(18, 42, 84, 0.59) 40%,
+      rgba(18, 42, 84, 0.37) 60%,
+      rgba(18, 42, 84, 0.15) 80%,
+      rgba(18, 42, 84, 0) 100%
+    ),
+    #141b30;
+  opacity: 1;
+  transition: opacity 460ms ease-in, visibility 0s linear 460ms;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.intro.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro__stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  transition: opacity 460ms ease-in, transform 460ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.intro.is-leaving .intro__stage {
+  opacity: 0;
+  transform: translate3d(0, -16px, 0) scale(1.012);
+}
+
+/* The 380 × 409 frame of assets/img/logo.png. The spacer gives the box its
+   height everywhere, including browsers without aspect-ratio. */
+.intro__art {
+  position: relative;
+  width: clamp(200px, min(54vw, 40vh), 400px);
+  opacity: 0;
+  transform: none;
+}
+
+.intro__art::before {
+  content: "";
+  display: block;
+  padding-top: 107.6316%;
+}
+
+.intro.is-ready .intro__art {
+  animation: intro-art-in 420ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+}
+
+/* The clinic's artwork is drawn as dark ink on white. Turning brightness to
+   zero keeps the alpha and flattens the colour, then invert paints every
+   layer white — the same white lockup the sample uses. */
+.intro__art img {
+  display: block;
+  filter: brightness(0) invert(1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* --------------------------------------------------------------------------
+   Layer geometry — percentages of the 380 × 409 artwork, taken from the same
+   coordinates the extraction script used.
+   -------------------------------------------------------------------------- */
+
+.intro__emblem {
+  position: absolute;
+  left: 9.2105%;
+  top: 1.956%;
+  width: 88.4211%;
+  height: 66.7482%;
+  transform-origin: 50% 50%;
+}
+
+.intro__inkwrap {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+
+.intro__ink {
+  width: 100%;
+  height: 100%;
+}
+
+.intro__layer {
+  position: absolute;
+}
+
+.intro__layer--orange {
+  left: 11.6071%;
+  top: 56.4103%;
+  width: 43.4524%;
+  height: 28.9377%;
+  --rise: 22.7848%;
+}
+
+.intro__layer--green {
+  left: 11.6071%;
+  top: 30.0366%;
+  width: 23.5119%;
+  height: 38.8278%;
+  --rise: 16.9811%;
+}
+
+.intro__layer--blue {
+  left: 33.3333%;
+  top: 30.0366%;
+  width: 13.3929%;
+  height: 38.8278%;
+  --rise: 16.9811%;
+}
+
+.intro__word {
+  position: absolute;
+  left: 2.3684%;
+  top: 71.1491%;
+  width: 86.8421%;
+  height: 26.4059%;
+  transform-origin: 50% 50%;
+}
+
+.intro__wordmark {
+  position: absolute;
+}
+
+.intro__wordmark--green {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 54.6296%;
+}
+
+.intro__wordmark--ink {
+  left: 6.0606%;
+  top: 65.7407%;
+  width: 81.2121%;
+  height: 34.2593%;
+}
+
+/* --------------------------------------------------------------------------
+   Loader — a 500-unit square centred on the heart at (275, 191) of the
+   artwork. The ring sits 190 units out, so it surrounds the emblem and still
+   fits inside the square when a pulse expands to 1.28×.
+   -------------------------------------------------------------------------- */
+
+.intro__loader {
+  position: absolute;
+  left: 53.4211%;
+  top: 35.2078%;
+  width: 131.5789%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.intro__loader::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.intro__ring-scale,
+.intro__ring-turn,
+.intro__pulse {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+}
+
+.intro__ring-scale {
+  opacity: 0;
+}
+
+.intro__pulse {
+  opacity: 0;
+}
+
+.intro__ring-arc,
+.intro__pulse circle {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+/* A touch of the corner bloom's teal on the loader, so it belongs to the stage. */
+.intro__ring-arc {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  filter: drop-shadow(0 0 6px rgba(38, 125, 154, 0.9));
+}
+
+/* 1. The loader sweeps a full turn, then collapses onto the heart. */
+.intro.is-ready .intro__ring-scale {
+  animation: intro-ring-out 300ms cubic-bezier(0.4, 0, 0.8, 1) 640ms both;
+}
+
+.intro.is-ready .intro__ring-turn {
+  animation: intro-ring-turn 940ms cubic-bezier(0.35, 0, 0.3, 1) both;
+}
+
+.intro.is-ready .intro__ring-arc {
+  animation: intro-ring-draw 820ms cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+/* 2. The heart forms out of that centre. */
+.intro.is-ready .intro__inkwrap {
+  animation: intro-ink-in 520ms cubic-bezier(0.16, 1, 0.3, 1) 620ms both;
+}
+
+/* 3. The colour figures rise into the mark. */
+.intro.is-ready .intro__layer--orange {
+  animation: intro-figure-in 420ms cubic-bezier(0.16, 1, 0.3, 1) 840ms both;
+}
+
+.intro.is-ready .intro__layer--green {
+  animation: intro-figure-in 420ms cubic-bezier(0.16, 1, 0.3, 1) 910ms both;
+}
+
+.intro.is-ready .intro__layer--blue {
+  animation: intro-figure-in 420ms cubic-bezier(0.16, 1, 0.3, 1) 980ms both;
+}
+
+/* 4. The wordmark locks in. */
+.intro.is-ready .intro__word {
+  animation: intro-word-in 540ms cubic-bezier(0.16, 1, 0.3, 1) 1080ms both;
+}
+
+/* 5. Two beats, with a faint ring leaving the heart on each. */
+.intro.is-ready .intro__emblem {
+  animation: intro-beat 640ms cubic-bezier(0.3, 0, 0.4, 1) 1760ms both;
+}
+
+.intro.is-ready .intro__pulse--a {
+  animation: intro-pulse 460ms cubic-bezier(0.2, 0.7, 0.4, 1) 1780ms forwards;
+}
+
+.intro.is-ready .intro__pulse--b {
+  animation: intro-pulse 460ms cubic-bezier(0.2, 0.7, 0.4, 1) 2080ms forwards;
+}
+
+/* --------------------------------------------------------------------------
+   Keyframes
+   -------------------------------------------------------------------------- */
+
+@keyframes intro-art-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(-18px, 0, 0) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes intro-ring-draw {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes intro-ring-turn {
+  0% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(120deg);
+  }
+}
+
+@keyframes intro-ring-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  70% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+@keyframes intro-ink-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-figure-in {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--rise, 18%));
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-word-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(-3.6364%, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes intro-beat {
+  0% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.035);
+  }
+  26% {
+    transform: scale(1);
+  }
+  36% {
+    transform: scale(1.022);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes intro-pulse {
+  0% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Calm version — the finished lockup, no movement
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .intro,
+  .intro *,
+  .intro *::before,
+  .intro *::after {
+    animation: none !important;
+    transition-duration: 1ms !important;
+  }
+
+  .intro__ring-scale,
+  .intro__pulse {
+    display: none;
+  }
+
+  .intro__art,
+  .intro__emblem,
+  .intro__inkwrap,
+  .intro__layer,
+  .intro__word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .intro.is-leaving .intro__stage {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+@media print {
+  .intro {
+    display: none;
+  }
+}

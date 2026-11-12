@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Teal information banners
+
+   The emergency box, the appointment form notice and the form status message
+   used to be tinted with the amber accent tokens (--c-accent-soft /
+   --c-accent-border plus amber icon and text inks). They are now drawn from
+   the clinic's own teal palette, in both themes.
+
+   Only these banner surfaces are re-pointed, so --c-accent keeps its role for
+   small highlights (links, the marquee icon, placeholder tokens) and no other
+   component changes colour.
+
+   Selectors carry [data-theme] so they also beat the dark overrides in
+   theme.css (which loads before this file).
+   ========================================================================== */
+
+:root {
+  --banner-bg: var(--c-primary-50);
+  --banner-border: var(--c-border-strong);
+  --banner-edge: var(--c-primary);
+  --banner-ink: var(--c-primary-700);
+  --banner-body: #14524e;
+  --banner-icon-bg: rgba(11, 93, 90, 0.1);
+  --banner-chip-bg: rgba(11, 93, 90, 0.06);
+  --banner-chip-border: #cfe3df;
+}
+
+[data-theme="dark"] {
+  --banner-bg: #0e2a27;
+  --banner-border: #173b37;
+  --banner-edge: #5cc9bd;
+  --banner-ink: #e9f3f1;
+  --banner-body: #a5bbb7;
+  --banner-icon-bg: rgba(92, 201, 189, 0.14);
+  --banner-chip-bg: rgba(255, 255, 255, 0.06);
+  --banner-chip-border: #2c534f;
+}
+
+[data-theme] .emergency,
+[data-theme] .form__notice,
+[data-theme] .form__status--info {
+  background: var(--banner-bg);
+  border-color: var(--banner-border);
+  color: var(--banner-body);
+}
+
+[data-theme] .emergency {
+  border-left-color: var(--banner-edge);
+}
+
+[data-theme] .emergency h2,
+[data-theme] .emergency h3,
+[data-theme] .emergency strong {
+  color: var(--banner-ink);
+}
+
+[data-theme] .emergency p,
+[data-theme] .form__notice,
+[data-theme] .form__status--info {
+  color: var(--banner-body);
+}
+
+[data-theme] .emergency__icon {
+  background: var(--banner-icon-bg);
+  color: var(--banner-edge);
+}
+
+[data-theme] .form__notice .icon,
+[data-theme] .form__status--info .icon {
+  color: var(--banner-edge);
+}
+
+/* Placeholder chips that sit inside the emergency box follow the banner,
+   while standalone tokens keep their own marker colour. */
+[data-theme] .emergency .token {
+  background: var(--banner-chip-bg);
+  border-color: var(--banner-chip-border);
+  color: var(--banner-ink);
+}

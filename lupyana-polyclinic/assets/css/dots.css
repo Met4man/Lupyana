@@ -1,0 +1,35 @@
+/* ==========================================================================
+   Decorative dot texture
+
+   A single-colour dot grid behind the page content, so transparent sections
+   show it and cards, panels and the hero surface cover it.
+
+   Light mode: the clinic green (#0b5d5a) at low opacity.
+   Dark mode: an off-white at low opacity — a cool contrasting pinprick against
+   the dark teal, kept faint so it reads as texture rather than pattern.
+
+   The inline head gate sets [data-theme] before first paint, so neither theme
+   sees a flash of the other's dots.
+   ========================================================================== */
+
+:root:not([data-theme="dark"]) main {
+  background-image: radial-gradient(
+    circle,
+    rgba(11, 93, 90, 0.16) 1px,
+    transparent 1.2px
+  );
+  background-size: 22px 22px;
+  background-position: 0 0;
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] main {
+  background-image: radial-gradient(
+    circle,
+    rgba(233, 243, 241, 0.1) 1px,
+    transparent 1.2px
+  );
+  background-size: 22px 22px;
+  background-position: 0 0;
+  background-attachment: fixed;
+}

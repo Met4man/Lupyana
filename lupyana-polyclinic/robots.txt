@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Thank-you and error pages should not be indexed.
+Disallow: /404.html
+Disallow: /thank-you.html
+
+Sitemap: https://lupyanapolyclinic.co.tz/sitemap.xml

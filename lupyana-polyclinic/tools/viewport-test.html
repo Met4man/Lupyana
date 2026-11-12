@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Viewport test</title>
+<style>
+  body { margin: 0; padding: 24px; background: #eef3f2; font-family: system-ui, sans-serif; }
+  h1 { margin: 0 0 16px; font-size: 18px; }
+  .row { display: flex; gap: 24px; align-items: flex-start; }
+  .frame { background: #fff; box-shadow: 0 8px 30px rgba(0,0,0,.12); }
+  .label { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #0b5d5a; }
+  iframe { display: block; border: 0; }
+</style>
+</head>
+<body>
+  <h1>Lupyana Polyclinic — responsive check</h1>
+  <div class="row">
+    <div><p class="label">360 px (mobile)</p><iframe src="../index.html" width="360" height="2600" title="360"></iframe></div>
+    <div><p class="label">768 px (tablet)</p><iframe src="../index.html" width="768" height="2600" title="768"></iframe></div>
+    <div><p class="label">1280 px (desktop)</p><iframe src="../index.html" width="1280" height="2600" title="1280"></iframe></div>
+  </div>
+</body>
+</html>

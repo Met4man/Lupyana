@@ -1,0 +1,271 @@
+/* ==========================================================================
+   Theme layer — light/dark tokens and targeted surface fixes (additive).
+
+   `data-theme` is written on <html> by the inline gate in each page's <head>
+   (before first paint, so there is no flash) and kept in sync by
+   assets/js/theme.js.
+
+   Light mode is untouched: every rule below only applies with
+   [data-theme="dark"]. Filled brand surfaces are pinned to their own dark
+   background so white labels keep their contrast; --c-white is left alone
+   because the site uses it as both a text and a card colour.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Brand — lightened for text and icons on dark surfaces. */
+  --c-primary: #5cc9bd;
+  --c-primary-700: #45b4a7;
+  --c-primary-200: #235450;
+  --c-primary-100: #173b37;
+  --c-primary-50: #0e2a27;
+
+  --c-secondary: #9dc3e4;
+  --c-secondary-50: #102330;
+
+  --c-accent: #f0b158;
+  --c-accent-strong: #f0b158;
+  --c-accent-soft: #2a2010;
+  --c-accent-border: #4a3a1c;
+  --c-on-accent: #2a1b05;
+
+  /* Neutrals */
+  --c-bg: #071312;
+  --c-surface: #0d1f1e;
+  --c-surface-2: #132a28;
+  --c-text: #e9f3f1;
+  --c-muted: #a5bbb7;
+  --c-border: #1e3a37;
+  --c-border-strong: #2d4f4b;
+
+  /* Status */
+  --c-success: #6fd6a0;
+  --c-success-soft: #0d2619;
+  --c-success-border: #1f4a33;
+  --c-danger: #ff8f85;
+  --c-danger-soft: #2b1414;
+  --c-danger-border: #4a2421;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 24px -18px rgba(0, 0, 0, 0.7);
+  --shadow-md: 0 18px 40px -24px rgba(0, 0, 0, 0.85);
+  --shadow-lg: 0 32px 70px -34px rgba(0, 0, 0, 0.9);
+  --focus-ring: 0 0 0 3px rgba(92, 201, 189, 0.35);
+}
+
+[data-theme="dark"] ::selection {
+  background: rgba(92, 201, 189, 0.28);
+  color: #e9f3f1;
+}
+
+/* --------------------------------------------------------------------------
+   Filled brand surfaces: keep a dark fill so white labels keep contrast
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] .skip-link,
+[data-theme="dark"] .btn--primary,
+[data-theme="dark"] .lang__btn[aria-pressed="true"] {
+  background-color: #0b5d5a;
+  border-color: #0b5d5a;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn--primary:hover {
+  background-color: #074643;
+  border-color: #074643;
+}
+
+[data-theme="dark"] .cta-band {
+  background:
+    radial-gradient(70% 120% at 100% 0%, rgba(233, 162, 59, 0.22) 0%, transparent 60%),
+    linear-gradient(135deg, #074643 0%, #0b5d5a 100%);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn--white {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #063634;
+}
+
+[data-theme="dark"] .btn--white:hover {
+  background-color: #dcefec;
+  border-color: #dcefec;
+}
+
+[data-theme="dark"] .btn--ghost,
+[data-theme="dark"] .icon-btn,
+[data-theme="dark"] .nav-toggle {
+  background-color: var(--c-surface);
+  border-color: var(--c-border-strong);
+  color: var(--c-text);
+}
+
+[data-theme="dark"] .btn--ghost:hover,
+[data-theme="dark"] .icon-btn:hover,
+[data-theme="dark"] .nav-toggle:hover {
+  background-color: var(--c-primary-50);
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+/* The liquid-glass layer (loaded before this file) tints these buttons, so the
+   dark equivalents need the same selector weight to take effect. */
+[data-theme="dark"] .btn.btn--ghost:not(.btn--link) {
+  border-color: rgba(92, 201, 189, 0.3);
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(92, 201, 189, 0.06) 58%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  color: var(--c-text);
+  text-shadow: none;
+}
+
+[data-theme="dark"] .btn.btn--ghost:not(.btn--link):hover {
+  border-color: rgba(92, 201, 189, 0.55);
+  background-color: rgba(92, 201, 189, 0.16);
+  color: var(--c-primary);
+}
+
+[data-theme="dark"] .btn.btn--white:not(.btn--link) {
+  border-color: #ffffff;
+  background-color: #ffffff;
+  background-image: none;
+  color: #063634;
+  text-shadow: none;
+}
+
+[data-theme="dark"] .btn.btn--white:not(.btn--link):hover {
+  border-color: #dcefec;
+  background-color: #dcefec;
+}
+
+/* --------------------------------------------------------------------------
+   Surfaces that were hard-coded to white in styles.css
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] .site-header {
+  background: rgba(7, 19, 18, 0.92);
+}
+
+[data-theme="dark"] .site-header.is-scrolled {
+  box-shadow: 0 12px 30px -24px rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="dark"] .mobile-bar {
+  background: rgba(7, 19, 18, 0.98);
+  box-shadow: 0 -10px 30px -24px rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .panel,
+[data-theme="dark"] .quick-card,
+[data-theme="dark"] .mini-card,
+[data-theme="dark"] .form-card,
+[data-theme="dark"] .input,
+[data-theme="dark"] .select,
+[data-theme="dark"] .textarea,
+[data-theme="dark"] dialog.staff-dialog {
+  background-color: var(--c-surface);
+}
+
+[data-theme="dark"] .select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a5bbb7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .hero__badge {
+  background: rgba(13, 31, 30, 0.97);
+}
+
+[data-theme="dark"] .ph__token {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--c-primary);
+}
+
+[data-theme="dark"] .emergency {
+  background: var(--c-accent-soft);
+  border-color: var(--c-accent-border);
+}
+
+[data-theme="dark"] .emergency h2,
+[data-theme="dark"] .emergency h3 {
+  color: #f6dfb4;
+}
+
+[data-theme="dark"] .emergency p {
+  color: #e2c48d;
+}
+
+[data-theme="dark"] .emergency .token {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: #6b5426;
+  color: #f6dfb4;
+}
+
+[data-theme="dark"] .emergency__icon {
+  background: rgba(240, 177, 88, 0.18);
+  color: #f0b158;
+}
+
+/* --------------------------------------------------------------------------
+   Hero and page-hero gradients that were built from #ffffff stops
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] .hero__panel {
+  background:
+    radial-gradient(60% 80% at 8% 0%, rgba(233, 162, 59, 0.12) 0%, transparent 60%),
+    radial-gradient(55% 70% at 100% 100%, rgba(92, 201, 189, 0.12) 0%, transparent 65%),
+    linear-gradient(135deg, var(--c-primary-50) 0%, var(--c-bg) 58%, #141007 100%);
+}
+
+[data-theme="dark"] .page-hero {
+  background:
+    radial-gradient(60% 120% at 100% 0%, rgba(233, 162, 59, 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, var(--c-primary-50) 0%, var(--c-bg) 100%);
+}
+
+[data-theme="dark"] .hero--immersive,
+[data-theme="dark"] .hero__panel--immersive {
+  background: var(--c-bg);
+}
+
+[data-theme="dark"] .hero__panel--immersive::after {
+  background: linear-gradient(
+    90deg,
+    var(--c-bg) 0%,
+    rgba(7, 19, 18, 0.94) 26%,
+    rgba(7, 19, 18, 0.62) 42%,
+    rgba(7, 19, 18, 0) 58%
+  );
+}
+
+[data-theme="dark"] .hero__features li {
+  background: rgba(92, 201, 189, 0.1);
+}
+
+/* The theme button uses the shared .icon-btn surface and its own hover tone. */
+.theme-toggle .icon {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 900px) {
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Small phones: the header needs the room for the new theme control. The
+   language switch stays available in the mobile menu and the footer. */
+@media (max-width: 420px) {
+  .site-header .header__actions .lang {
+    display: none;
+  }
+}

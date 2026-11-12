@@ -1,0 +1,10 @@
+{
+  "name": "lupyana-polyclinic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static, accessible website for Lupyana Polyclinic, with a single editable content.json and EN/SW support.",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "sync": "node tools/sync-content.mjs"
+  }
+}
