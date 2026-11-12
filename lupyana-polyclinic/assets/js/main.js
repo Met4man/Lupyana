@@ -366,7 +366,6 @@
         </div>
       </div>
       <div class="container footer__bottom">
-        <p data-i18n="footer.copyright">${esc(t("footer.copyright"))}</p>
         <div class="footer__legal">
           <a href="privacy.html" data-i18n="nav.privacy">${esc(t("nav.privacy"))}</a>
           <button type="button" class="footer__cookie" data-cookie-open>Cookie settings</button>
